@@ -1,0 +1,21 @@
+<html>
+<body>
+<h1>Student: {{last_name}}, {{first_name}}</h1>
+<h2>Github: {{github}}</h2>
+
+<p>This student has shown extreme recalcitrance and has generally proved to be unreliable.</p>
+<p>It is my recommendation that they be put on double-secret probation for the remainder of the course.</p>
+
+{% block body %}
+  <ul>
+  {% for project, grade in grade_list %}
+     
+       <li><a href="/project/{{ project }}">{{ project}}</a>: {{ grade }}</li>
+      
+  {% endfor %}
+  </ul>
+{% endblock %}
+
+
+</body>
+</html>

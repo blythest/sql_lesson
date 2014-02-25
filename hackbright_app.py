@@ -7,9 +7,7 @@ def get_student_by_github(github):
     query = """SELECT first_name, last_name, github FROM Students WHERE github = ?"""
     DB.execute(query, (github,))
     row = DB.fetchone()
-    print """\
-Student: %s %s
-Github account: %s"""%(row[0], row[1], row[2])
+    return row
 
 def make_new_student(first_name, last_name, github):
     query = """INSERT INTO Students VALUES (?,?,?)"""
@@ -48,9 +46,6 @@ def assign_grade(*args):
     print "Successfully assigned grade: %s" % (grade)
     print "Project title is: %s" % (project_title) 
 
-
-
-
 def add_project(*args):
     description_list = args[1:-1]
     title = args[0]
@@ -67,8 +62,16 @@ def get_all_grades(student_github):
     query = """SELECT project_title, grade FROM Grades WHERE student_github == ?"""
     DB.execute(query, (student_github,))
     rows = DB.fetchall()
-    for element in rows:
-        print """project: %s, grade: %s""" % (element[0], element[1])
+    print rows
+    return rows
+
+def get_grades_for_project(project_title):
+    query = """SELECT Grades.project_title, Students.first_name, Students.last_name, Grades.student_github, Grades.grade 
+    FROM Grades JOIN Students ON (Grades.student_github=Students.github) WHERE project_title == ?"""
+    DB.execute(query, (project_title,))
+    rows = DB.fetchall()
+    print rows
+    return rows
 
 def connect_to_db():
     global DB, CONN
@@ -98,6 +101,8 @@ def main():
             assign_grade(*args)
         elif command == "all_grades":
             get_all_grades(*args)
+        elif command == "grades_for_project":
+            get_grades_for_project(*args)
 
     CONN.close()
 
